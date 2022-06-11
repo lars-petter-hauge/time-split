@@ -1,0 +1,11 @@
+{
+  "name": "time-split",
+  "version": "0.0.1",
+  "title": "Time Split",
+  "author": "Lars Petter Hauge",
+  "factorio_version": "1.1",
+  "Description": "Provides an in-game time-split interface to keep track of when given events are accomplished.",
+  "dependencies": [
+    "base"
+  ]
+}
