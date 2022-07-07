@@ -1,10 +1,12 @@
 import json
+import tempfile
 import click
 import shutil
 from pathlib import Path
 import os
 import logging
 import shutil
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -52,10 +54,12 @@ def bundle(
     target_path: Path,
 ) -> None:
     folder_name = package_name + "_" + version
-
     write_path = target_path / folder_name
+
     logger.info(f"Writing <{folder_name}> to <{target_path.absolute()}>")
-    shutil.make_archive(write_path, "zip", source_directory)
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        shutil.copytree(src=source_directory, dst=tmpdirname + "/" + folder_name)
+        shutil.make_archive(write_path, "zip", tmpdirname)
 
 
 @click.command()
