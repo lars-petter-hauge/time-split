@@ -30,7 +30,14 @@ function timestamp_to_tick(timestamp)
     return hours * 216000 + minutes * 3600 + seconds * 60
 end
 
-function contains(table, name)
+function contains(table, value)
+    for i = 1, #table do
+        if table[i] == value then return true end
+    end
+    return false
+end
+
+function contains_name(table, name)
     for _, entry in ipairs(table) do
         if name == entry.name then
             return true
@@ -95,7 +102,7 @@ script.on_event(defines.events.on_player_crafted_item, function(event)
     local reference_checkpoints = player_global["reference_checkpoints"]
 
     for _, ref_entry in pairs(reference_checkpoints) do
-        if (ref_entry.name == item_name) and not contains(player_global["current_checkpoints"], item_name) then
+        if (ref_entry.name == item_name) and not contains_name(player_global["current_checkpoints"], item_name) then
             table.insert(player_global["current_checkpoints"], { name = ref_entry.name, tick = game.ticks_played })
         end
     end
@@ -174,6 +181,11 @@ end
 
 function update_table()
     local player = game.get_player(player_index)
+
+    -- This mod only makes sense if it is part of the save from the creation of the game.
+    if not contains(player.gui.screen.children_names, "timesplit_mainframe") then
+        return
+    end
 
     local content_frame = player.gui.screen.timesplit_mainframe.content_frame
     -- Clear and create new is not the most efficient way..
