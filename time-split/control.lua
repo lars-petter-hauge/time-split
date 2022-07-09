@@ -9,10 +9,6 @@ function padded_to_string(number)
     return tostring(number)
 end
 
-function space_padded(str)
-    return "  " .. str .. "  "
-end
-
 function tick_to_timestamp(tick)
     local seconds = tick / 60
     local hours = math.floor(seconds / 3600)
@@ -156,24 +152,22 @@ function create_table(frame, ticks)
     local timesplit_set = false
 
     for _, ref_entry in pairs(reference_checkpoints) do
-        table.add { type = "label", caption = space_padded(ref_entry.name) }
+        table.add { type = "label", caption = ref_entry.name, style = "padded_label" }
 
-        local current_diff_label = table.add { type = "label", caption = "-" }
-        local sign = "+"
+        local current_diff_label = table.add { type = "label", caption = "-", style = "padded_label" }
         local diff = 0
 
-        table.add { type = "label", caption = space_padded(tick_to_timestamp(ref_entry.tick)) }
-        local current_timestamp_label = table.add { type = "label", caption = "-" }
+        table.add { type = "label", caption = tick_to_timestamp(ref_entry.tick), style = "padded_label" }
+        local current_timestamp_label = table.add { type = "label", caption = "-", style = "padded_label" }
         local curr_entry = find_matching_entry(current_checkpoints, ref_entry.name)
         if curr_entry ~= nil then
             diff = curr_entry.tick - ref_entry.tick
-            sign, diff = extract_sign(diff)
-            current_diff_label.caption = space_padded(sign .. tick_to_timestamp(diff))
-            current_timestamp_label.caption = space_padded(tick_to_timestamp(curr_entry.tick))
+            current_diff_label.caption = format_diff_text(diff)
+            current_timestamp_label.caption = tick_to_timestamp(curr_entry.tick)
         elseif not timesplit_set then
             diff = ticks - ref_entry.tick
             sign, diff = extract_sign(diff)
-            current_diff_label.caption = space_padded(sign .. tick_to_timestamp(diff))
+            current_diff_label.caption = sign .. tick_to_timestamp(diff)
             timesplit_set = true
         end
     end
