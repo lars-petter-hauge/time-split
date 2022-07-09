@@ -135,13 +135,16 @@ function find_matching_entry(array, name)
     return nil
 end
 
-function extract_sign(value)
+function set_caption_and_apply_style(label, value)
     local sign = "+"
+    local font = "padded_red"
     if value < 0 then
         sign = "-"
         value = value * -1
+        font = "padded_green"
     end
-    return sign, value
+    label.caption = sign .. tick_to_timestamp(value)
+    label.style.font = font
 end
 
 function create_table(frame, ticks)
@@ -162,12 +165,11 @@ function create_table(frame, ticks)
         local curr_entry = find_matching_entry(current_checkpoints, ref_entry.name)
         if curr_entry ~= nil then
             diff = curr_entry.tick - ref_entry.tick
-            current_diff_label.caption = format_diff_text(diff)
+            set_caption_and_apply_style(current_diff_label, diff)
             current_timestamp_label.caption = tick_to_timestamp(curr_entry.tick)
         elseif not timesplit_set then
             diff = ticks - ref_entry.tick
-            sign, diff = extract_sign(diff)
-            current_diff_label.caption = sign .. tick_to_timestamp(diff)
+            set_caption_and_apply_style(current_diff_label, diff)
             timesplit_set = true
         end
     end
