@@ -16,13 +16,21 @@ function padded_to_string(number)
     return tostring(number)
 end
 
-function tick_to_timestamp(tick)
+function tick_to_timestamp(tick, truncated)
+    truncated = truncated or false
+
     local seconds = tick / 60
     local hours = math.floor(seconds / 3600)
     seconds = seconds % (3600)
     local mins = math.floor(seconds / (60))
     seconds = math.floor(seconds % (60))
-    return padded_to_string(hours) .. ":" .. padded_to_string(mins) .. ":" .. padded_to_string(seconds)
+    if not truncated or hours > 0 then
+        return padded_to_string(hours) .. ":" .. padded_to_string(mins) .. ":" .. padded_to_string(seconds)
+    end
+    if mins > 0 then
+        return padded_to_string(mins) .. ":" .. padded_to_string(seconds)
+    end
+    return padded_to_string(seconds)
 end
 
 function timestamp_to_tick(timestamp)
@@ -147,7 +155,7 @@ function set_caption_and_apply_style(label, value)
         value = value * -1
         font = "padded_green"
     end
-    label.caption = sign .. tick_to_timestamp(value)
+    label.caption = sign .. tick_to_timestamp(value, true)
     label.style.font = font
 end
 
