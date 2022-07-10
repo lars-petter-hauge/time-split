@@ -1,6 +1,13 @@
 local player_index = 1
 local timestamp_pattern = "(%d%d):(%d%d):(%d%d)"
 local DEFAULT_TICK = 2592000
+local SETTING_TABLE = {
+    { setting_name = "Automation", type = "technology", item_name = "automation" },
+    { setting_name = "Chemical Science", type = "technology", item_name = "chemical-science-pack" },
+    { setting_name = "Logistic Science", type = "technology", item_name = "logistic-science-pack" },
+    { setting_name = "Production Science", type = "technology", item_name = "production-science-pack" },
+    { setting_name = "Rocket Silo", type = "technology", item_name = "rocket-silo" },
+    { setting_name = "Rocket Launch", type = "achievement", item_name = "there-is-no-spoon" }, }
 
 function padded_to_string(number)
     if number < 10 then
@@ -50,26 +57,19 @@ function populate_globals()
     global.players[player_index] = { rocket_launched = false, reference_checkpoints = {}, current_checkpoints = {} }
     local player = game.get_player(player_index)
 
-    for _, name in ipairs({
-        "automation",
-        "chemical-science-pack",
-        "logistic-science-pack",
-        "production-science-pack",
-        "rocket-silo",
-        "rocket-launch",
-    }) do
-        local setting = game.players[player_index].mod_settings[name]
+    for _, entry in ipairs(SETTING_TABLE) do
+        local setting = game.players[player_index].mod_settings[entry.setting_name]
         local tick = timestamp_to_tick(setting.value)
         if tick == nil then
             tick = DEFAULT_TICK
             player.print("Mod Time-Split: Was not able to parse the timestamp for item <" ..
-                name ..
+                entry.setting_name ..
                 ">, got: <" .. setting.value ..
                 ">, must be of the required pattern 00:00:00. Fallback to " ..
                 tick_to_timestamp(tick))
         end
         table.insert(global.players[player_index]["reference_checkpoints"],
-            { name = name, tick = tick })
+            { name = entry.item_name, tick = tick })
     end
 end
 
@@ -120,15 +120,15 @@ script.on_event(defines.events.on_rocket_launched, function(event)
     local player_global = global.players[player_index]
 
     if player_global.rocket_launched == false then
-        table.insert(player_global["current_checkpoints"], { name = "rocket-launch", tick = game.ticks_played })
+        table.insert(player_global["current_checkpoints"], { name = "there-is-no-spoon", tick = game.ticks_played })
         player_global["rocket_launched"] = false
     end
 end)
 
 
-function find_matching_entry(array, name)
+function find_matching_entry(array, value, key)
     for _, entry in pairs(array) do
-        if entry.name == name then
+        if entry[key] == value then
             return entry
         end
     end
@@ -155,14 +155,20 @@ function create_table(frame, ticks)
     local timesplit_set = false
 
     for _, ref_entry in pairs(reference_checkpoints) do
-        table.add { type = "label", caption = ref_entry.name, style = "padded_label" }
+        local setting_entry = find_matching_entry(SETTING_TABLE, ref_entry.name, "item_name")
+        local caption = ref_entry.name
+        if setting_entry ~= nil then
+            caption = "[" .. setting_entry.type .. "=" .. setting_entry.item_name .. "]" .. setting_entry.setting_name
+        end
+
+        table.add { type = "label", caption = caption, style = "padded_label" }
 
         local current_diff_label = table.add { type = "label", caption = "-", style = "padded_label" }
         local diff = 0
 
         table.add { type = "label", caption = tick_to_timestamp(ref_entry.tick), style = "padded_label" }
         local current_timestamp_label = table.add { type = "label", caption = "-", style = "padded_label" }
-        local curr_entry = find_matching_entry(current_checkpoints, ref_entry.name)
+        local curr_entry = find_matching_entry(current_checkpoints, ref_entry.name, "name")
         if curr_entry ~= nil then
             diff = curr_entry.tick - ref_entry.tick
             set_caption_and_apply_style(current_diff_label, diff)
