@@ -41,20 +41,23 @@ function timestamp_to_tick(timestamp)
     return hours * 216000 + minutes * 3600 + seconds * 60
 end
 
-function contains(table, value)
-    for i = 1, #table do
-        if table[i] == value then return true end
-    end
-    return false
-end
-
-function contains_name(table, name)
-    for _, entry in ipairs(table) do
-        if name == entry.name then
-            return true
+function find(array, value, key)
+    -- Searches the array for the value and returns the entry if found
+    -- If a key is given, the array is indexed with key to search for value
+    -- otherwise each item in array is checked against value.
+    -- If not found, nil is returned
+    if key == nil then
+        for i = 1, #array do
+            if array[i] == value then return value end
+        end
+    else
+        for _, entry in pairs(array) do
+            if entry[key] == value then
+                return entry
+            end
         end
     end
-    return false
+    return nil
 end
 
 script.on_init(function()
@@ -110,7 +113,7 @@ script.on_event(defines.events.on_player_crafted_item, function(event)
     local reference_checkpoints = player_global["reference_checkpoints"]
 
     for _, ref_entry in pairs(reference_checkpoints) do
-        if (ref_entry.name == item_name) and not contains_name(player_global["current_checkpoints"], item_name) then
+        if (ref_entry.name == item_name) and find(player_global["current_checkpoints"], item_name, "name") ~= nil then
             table.insert(player_global["current_checkpoints"], { name = ref_entry.name, tick = game.ticks_played })
         end
     end
@@ -137,16 +140,6 @@ script.on_event(defines.events.on_rocket_launched, function(event)
     end
 end)
 
-
-function find_matching_entry(array, value, key)
-    for _, entry in pairs(array) do
-        if entry[key] == value then
-            return entry
-        end
-    end
-    return nil
-end
-
 function set_caption_and_apply_style(label, value)
     local sign = "+"
     local font = "padded_red"
@@ -167,7 +160,7 @@ function create_table(frame, ticks)
     local timesplit_set = false
 
     for _, ref_entry in pairs(reference_checkpoints) do
-        local setting_entry = find_matching_entry(SETTING_TABLE, ref_entry.name, "item_name")
+        local setting_entry = find(SETTING_TABLE, ref_entry.name, "item_name")
         local caption = ref_entry.name
         if setting_entry ~= nil then
             caption = "[" .. setting_entry.type .. "=" .. setting_entry.item_name .. "]" .. setting_entry.setting_name
@@ -180,7 +173,7 @@ function create_table(frame, ticks)
 
         table.add { type = "label", caption = tick_to_timestamp(ref_entry.tick), style = "padded_label" }
         local current_timestamp_label = table.add { type = "label", caption = "-", style = "padded_label" }
-        local curr_entry = find_matching_entry(current_checkpoints, ref_entry.name, "name")
+        local curr_entry = find(current_checkpoints, ref_entry.name, "name")
         if curr_entry ~= nil then
             diff = curr_entry.tick - ref_entry.tick
             set_caption_and_apply_style(current_diff_label, diff)
@@ -195,7 +188,7 @@ end
 
 function initialized_ui(player)
     -- This mod only makes sense if it is part of the save from the creation of the game.
-    if contains(player.gui.screen.children_names, "timesplit_mainframe") then
+    if find(player.gui.screen.children_names, "timesplit_mainframe") then
         return true
     end
     return false
