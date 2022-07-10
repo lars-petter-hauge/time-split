@@ -1,37 +1,37 @@
 data:extend({
     {
         type = "string-setting",
-        name = "automation",
+        name = "Automation",
         setting_type = "runtime-per-user",
         default_value = "12:00:00",
     },
     {
         type = "string-setting",
-        name = "chemical-science-pack",
+        name = "Chemical Science",
         setting_type = "runtime-per-user",
         default_value = "12:00:00",
     },
     {
         type = "string-setting",
-        name = "logistic-science-pack",
+        name = "Logistic Science",
         setting_type = "runtime-per-user",
         default_value = "12:00:00",
     },
     {
         type = "string-setting",
-        name = "production-science-pack",
+        name = "Production Science",
         setting_type = "runtime-per-user",
         default_value = "12:00:00",
     },
     {
         type = "string-setting",
-        name = "rocket-silo",
+        name = "Rocket Silo",
         setting_type = "runtime-per-user",
         default_value = "12:00:00",
     },
     {
         type = "string-setting",
-        name = "rocket-launch",
+        name = "Rocket Launch",
         setting_type = "runtime-per-user",
         default_value = "12:00:00",
     },
