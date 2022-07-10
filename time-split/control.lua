@@ -81,8 +81,12 @@ script.on_event(defines.events.on_player_created, function(event)
     local main_frame = screen_element.add {
         type = "frame",
         name = "timesplit_mainframe",
-        caption = "Time Split Table",
+        caption = "Time Split",
+        direction = "vertical",
     }
+    local current_time_label = main_frame.add { type = "label", name = "current_time",
+        caption = "-" }
+    current_time_label.style.font = "header"
 
     main_frame.style.size = { 350, 350 }
     main_frame.add {
@@ -181,20 +185,32 @@ function create_table(frame, ticks)
     end
 end
 
+function initialized_ui(player)
+    -- This mod only makes sense if it is part of the save from the creation of the game.
+    if contains(player.gui.screen.children_names, "timesplit_mainframe") then
+        return true
+    end
+    return false
+end
+
 function update_table()
     local player = game.get_player(player_index)
-
-    -- This mod only makes sense if it is part of the save from the creation of the game.
-    if not contains(player.gui.screen.children_names, "timesplit_mainframe") then
-        return
-    end
+    if not initialized_ui(player) then return end
 
     local content_frame = player.gui.screen.timesplit_mainframe.content_frame
     -- Clear and create new is not the most efficient way..
     content_frame.clear()
-    local timestamp = tick_to_timestamp(game.ticks_played)
-    content_frame.add { type = "label", name = "current_time", caption = "Running time:  " .. timestamp }
     create_table(content_frame, game.ticks_played)
 end
 
+function update_runtime()
+    local player = game.get_player(player_index)
+    if not initialized_ui(player) then return end
+
+    local current_time_label = player.gui.screen.timesplit_mainframe.current_time
+    local timestamp = tick_to_timestamp(game.ticks_played)
+    current_time_label.caption = "Running time:  " .. timestamp
+end
+
 script.on_nth_tick(60, update_table)
+script.on_nth_tick(10, update_runtime)
