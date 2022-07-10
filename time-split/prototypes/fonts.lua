@@ -15,6 +15,12 @@ data:extend(
             size = 13,
             border = true,
             border_color = { 240, 60, 60 },
+        },
+        {
+            type = "font",
+            name = "header",
+            from = "default",
+            size = 15,
         }
     }
 )
