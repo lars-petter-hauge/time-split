@@ -19,7 +19,19 @@ data:extend({
     },
     {
         type = "string-setting",
+        name = "Bots",
+        setting_type = "runtime-per-user",
+        default_value = "12:00:00",
+    },
+    {
+        type = "string-setting",
         name = "Production Science",
+        setting_type = "runtime-per-user",
+        default_value = "12:00:00",
+    },
+    {
+        type = "string-setting",
+        name = "Utility Science",
         setting_type = "runtime-per-user",
         default_value = "12:00:00",
     },
