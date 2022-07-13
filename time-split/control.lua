@@ -43,7 +43,7 @@ script.on_event(defines.events.on_player_created, function(event)
         caption = "-" }
     current_time_label.style.font = "header"
 
-    main_frame.style.size = { 400, 260 }
+    main_frame.style.size = { 400, 300 }
     main_frame.add {
         type = "scroll-pane",
         name = "content_frame",
