@@ -11,13 +11,7 @@ function create_table(frame, ticks)
     local timesplit_set = false
 
     for _, ref_entry in pairs(reference_checkpoints) do
-        local setting_entry = find(SETTING_TABLE, ref_entry.name, "item_name")
-        local caption = ref_entry.name
-        if setting_entry ~= nil then
-            caption = "[" .. setting_entry.type .. "=" .. setting_entry.item_name .. "]" .. setting_entry.setting_name
-        end
-
-        table.add { type = "label", caption = caption, style = "padded_label" }
+        table.add { type = "label", caption = { "mod-setting-name." .. ref_entry.name }, style = "padded_label" }
 
         local current_diff_label = table.add { type = "label", caption = "-", style = "padded_label" }
         local diff = 0

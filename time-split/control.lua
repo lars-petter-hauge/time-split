@@ -18,13 +18,13 @@ function populate_globals()
         if tick == nil then
             tick = DEFAULT_TICK
             player.print("Mod Time-Split: Was not able to parse the timestamp for item <" ..
-                entry.setting_name ..
+                setting.display_name ..
                 ">, got: <" .. setting.value ..
                 ">, must be of the required pattern 00:00:00. Fallback to " ..
                 tick_to_timestamp(tick))
         end
         table.insert(global.players[PLAYER_INDEX]["reference_checkpoints"],
-            { name = entry.item_name, tick = tick })
+            { name = entry.setting_name, tick = tick })
     end
 end
 
