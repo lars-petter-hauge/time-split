@@ -64,7 +64,7 @@ script.on_event(defines.events.on_player_crafted_item, function(event)
 end)
 
 script.on_event(defines.events.on_research_finished, function(event)
-    local technology_name = event.technology.name
+    local technology_name = event.research.name
     local player_global = global.players[PLAYER_INDEX]
     local reference_checkpoints = player_global["reference_checkpoints"]
 
