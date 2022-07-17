@@ -9,7 +9,7 @@ end)
 
 function populate_globals()
     global.players[PLAYER_INDEX] = { rocket_launched = false, reference_checkpoints = {},
-        current_checkpoints = {} }
+        current_checkpoints = {}, compact_view = false }
     local player = game.get_player(PLAYER_INDEX)
 
     for _, entry in ipairs(SETTING_TABLE) do
@@ -30,25 +30,9 @@ end
 
 script.on_event(defines.events.on_player_created, function(event)
     populate_globals()
-
     local player = game.get_player(PLAYER_INDEX)
-    local screen_element = player.gui.screen
-    local main_frame = screen_element.add {
-        type = "frame",
-        name = "timesplit_mainframe",
-        caption = "Time Split",
-        direction = "vertical",
-    }
-    local current_time_label = main_frame.add { type = "label", name = "current_time",
-        caption = "-" }
-    current_time_label.style.font = "header"
-
-    main_frame.style.size = { 400, 300 }
-    main_frame.add {
-        type = "scroll-pane",
-        name = "content_frame",
-        direction = "vertical"
-    }
+    local screen = player.gui.screen
+    create_main_ui(screen)
 end)
 
 script.on_event(defines.events.on_player_crafted_item, function(event)
@@ -84,6 +68,25 @@ script.on_event(defines.events.on_rocket_launched, function(event)
     end
 end)
 
+function cb_compact_button()
+    local player_global = global.players[PLAYER_INDEX]
+    local player = game.get_player(PLAYER_INDEX)
+    if player_global["compact_view"] then
+        player_global["compact_view"] = false
+        player.gui.screen.timesplit_mainframe.style.size = { 400, 320 }
+    else
+        player_global["compact_view"] = true
+        player.gui.screen.timesplit_mainframe.style.size = { 400, 155 }
+    end
+    update_table()
+end
+
+script.on_event(defines.events.on_gui_click, function(event)
+    if event.element.name == "compact_button" then cb_compact_button()
+    end
+
+end)
+
 function initialized_ui(player)
     -- This mod only makes sense if it is part of the save from the creation of the game.
     if find(player.gui.screen.children_names, "timesplit_mainframe") then
@@ -106,7 +109,7 @@ function update_runtime()
     local player = game.get_player(PLAYER_INDEX)
     if not initialized_ui(player) then return end
 
-    local current_time_label = player.gui.screen.timesplit_mainframe.current_time
+    local current_time_label = player.gui.screen.timesplit_mainframe.header_frame.current_time
     local timestamp = tick_to_timestamp(game.ticks_played)
     current_time_label.caption = "Running time:  " .. timestamp
 end
