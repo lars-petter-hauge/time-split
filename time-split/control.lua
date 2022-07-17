@@ -18,7 +18,7 @@ function populate_globals()
         if tick == nil then
             tick = DEFAULT_TICK
             player.print("Mod Time-Split: Was not able to parse the timestamp for item <" ..
-                setting.display_name ..
+                entry.display_name ..
                 ">, got: <" .. setting.value ..
                 ">, must be of the required pattern 00:00:00. Fallback to " ..
                 tick_to_timestamp(tick))
