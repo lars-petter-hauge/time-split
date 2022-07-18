@@ -23,10 +23,6 @@ function create_main_ui(screen)
         sprite = "compress" }
     compact_button.style.size = { 24, 24 }
 
-    local icon_only_button = header_frame.add { type = "sprite-button", name = "icon_only_button",
-        sprite = "icons_only" }
-    icon_only_button.style.size = { 24, 24 }
-
     main_frame.add {
         type = "scroll-pane",
         name = "content_frame",
