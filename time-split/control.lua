@@ -41,7 +41,7 @@ script.on_event(defines.events.on_player_crafted_item, function(event)
     local reference_checkpoints = player_global["reference_checkpoints"]
 
     for _, ref_entry in pairs(reference_checkpoints) do
-        if (ref_entry.name == item_name) and find(player_global["current_checkpoints"], item_name, "name") ~= nil then
+        if (ref_entry.name == item_name) and find(player_global["current_checkpoints"], item_name, "name") == nil then
             table.insert(player_global["current_checkpoints"], { name = ref_entry.name, tick = game.ticks_played })
         end
     end
