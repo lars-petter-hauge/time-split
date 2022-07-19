@@ -2,8 +2,8 @@ PLAYER_INDEX = 1
 DEFAULT_TICK = 2592000
 SETTING_TABLE = {
     { display_name = "Automation", type = "technology", setting_name = "automation" },
-    { display_name = "Chemical Science", type = "technology", setting_name = "chemical-science-pack" },
     { display_name = "Logistic Science", type = "technology", setting_name = "logistic-science-pack" },
+    { display_name = "Chemical Science", type = "technology", setting_name = "chemical-science-pack" },
     { display_name = "Bots", type = "technology", setting_name = "construction-robotics" },
     { display_name = "Production Science", type = "technology", setting_name = "production-science-pack" },
     { display_name = "Utility Science", type = "technology", setting_name = "utility-science-pack" },
