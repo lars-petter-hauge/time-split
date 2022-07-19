@@ -7,13 +7,13 @@ data:extend({
     },
     {
         type = "string-setting",
-        name = "chemical-science-pack",
+        name = "logistic-science-pack",
         setting_type = "runtime-per-user",
         default_value = "12:00:00",
     },
     {
         type = "string-setting",
-        name = "logistic-science-pack",
+        name = "chemical-science-pack",
         setting_type = "runtime-per-user",
         default_value = "12:00:00",
     },
