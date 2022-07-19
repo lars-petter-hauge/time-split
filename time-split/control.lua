@@ -10,7 +10,12 @@ end)
 function populate_globals()
     global.players[PLAYER_INDEX] = { rocket_launched = false, reference_checkpoints = {},
         current_checkpoints = {}, compact_view = false }
+    populate_references()
+end
+
+function populate_references()
     local player = game.get_player(PLAYER_INDEX)
+    global.players[PLAYER_INDEX].reference_checkpoints = {}
 
     for _, entry in ipairs(SETTING_TABLE) do
         local setting = game.players[PLAYER_INDEX].mod_settings[entry.setting_name]
@@ -34,6 +39,11 @@ script.on_event(defines.events.on_player_created, function(event)
     local screen = player.gui.screen
     create_main_ui(screen)
 end)
+
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+    populate_references()
+end)
+
 
 script.on_event(defines.events.on_player_crafted_item, function(event)
     local item_name = event.item_stack.name
