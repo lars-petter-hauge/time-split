@@ -19,4 +19,26 @@ The mod is implemented using the provided factorio API. Factorio is implemented 
 
 ## What this mod doesn't do
 
-It does not try to compete with the much more developed LiveSplit. LiveSplit is a software used by speedrunners and is also compatible with factorio. It is not a factorio mod, hence does not disable achievement. It will be more accurate for time splits as it is not based on in game UPS. It is also by far much more configurable.
+It does not try to compete with the much more developed [LiveSplit](https://livesplit.org/). LiveSplit is a software used by speedrunners and is also compatible with factorio. It is not a factorio mod, hence does not disable achievement. It will be more accurate for time splits as it is not based on in game UPS. It is also by far much more configurable.
+
+## Contribute
+
+Feel free to create issues and/or submit pull requests. All tests are required to pass, but there are only unit tests added. Unfortunately it is not possible to add integration tests in the CI pipeline and any testing within the game must be done manually.
+
+## Tests
+
+The testing framework is based on [busted](https://olivinelabs.com/busted). If you want to run the tests locally, please install as described on their pages and run with:
+
+```bash
+busted . --pattern test_
+```
+
+## Local deploy
+
+A convenience script `deploy.py` is made for developers to install the mod locally. The script will package the files as factorio expects them and copy to the given folder. Typically the steam folder is located in `C:\Users\user name\AppData\Roaming\Factorio\mods`. Run the deploy with:
+
+```bash
+python deploy.py --p time-split -t C:\Users\user name\AppData\Roaming\Factorio\mods
+```
+
+Otherwise please refer to `deploy.py -h` for more information.
