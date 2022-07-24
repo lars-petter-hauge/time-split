@@ -42,3 +42,9 @@ python deploy.py --p time-split -t C:\Users\user name\AppData\Roaming\Factorio\m
 ```
 
 Otherwise please refer to `deploy.py -h` for more information.
+
+## Attributes
+
+<a href="https://www.flaticon.com/free-icons/short-term" title="short term icons">Short term icons created by Anggara - Flaticon</a>
+
+<a href="https://www.flaticon.com/free-icons/sort-ascending" title="sort ascending icons">Sort ascending icons created by Bharat Icons - Flaticon</a>
