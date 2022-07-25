@@ -6,6 +6,7 @@ from pathlib import Path
 import os
 import logging
 import shutil
+import re
 
 
 logger = logging.getLogger(__name__)
@@ -40,11 +41,31 @@ def valid_target_path(ctx, param, value):
     return path
 
 
-def package_info(package_dir: Path) -> str:
+def valid_version_format(ctx, param, value):
+    pattern = re.compile("^\d{1,2}\.\d{1,2}(\.\d{1,2})?")
+    if re.fullmatch(pattern, value) is None:
+        raise click.BadParameter(
+            f"Version provided must match pattern of major.minor.micro, where micro is optional. "
+            f"Each subversion must be a number between 0 and 99. got <{value}>"
+        )
+    return value
+
+
+def inject_version_value(info_file: Path, version: str) -> None:
+    with open(info_file, "r") as fh:
+        content = json.load(fh)
+
+    content["version"] = version
+
+    with open(info_file, "w") as fh:
+        json.dump(content, fh)
+
+
+def get_package_name(package_dir: Path) -> str:
     with open(package_dir / "info.json") as fh:
         content = json.load(fh)
 
-    return content["name"], content["version"]
+    return content["name"]
 
 
 def bundle(
@@ -58,7 +79,9 @@ def bundle(
 
     logger.info(f"Writing <{folder_name}> to <{target_path.absolute()}>")
     with tempfile.TemporaryDirectory() as tmpdirname:
-        shutil.copytree(src=source_directory, dst=tmpdirname + "/" + folder_name)
+        destination = tmpdirname + "/" + folder_name
+        shutil.copytree(src=source_directory, dst=destination)
+        inject_version_value(destination + "/" + "info.json", version)
         shutil.make_archive(write_path, "zip", tmpdirname)
 
 
@@ -73,10 +96,18 @@ def bundle(
 @click.option(
     "--target_path", "-t", required=True, help="Target path", callback=valid_target_path
 )
-def deploy(package_dir, target_path):
+@click.option(
+    "--version",
+    "-v",
+    help="Version to inject",
+    callback=valid_version_format,
+    default="0.0.0",
+    show_default=True,
+)
+def deploy(package_dir, target_path, version):
     logger.info("Initiating deploy...")
 
-    package_name, version = package_info(package_dir)
+    package_name = get_package_name(package_dir)
     logger.info(f"Found <{package_name}> version <{version}> - bundling...")
 
     bundle(package_name, version, package_dir, target_path)
