@@ -1,0 +1,25 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - name: build
+        run: |
+          mkdir build
+          python deploy.py --package_dir time-split --target_path build --version ${{ steps.get_version.outputs.VERSION }}
+
+      - name: publish
+        run: |
+          python publish.py --zipfilepath build/time-split_${{ steps.get_version.outputs.VERSION }} --api_key ${{ API_KEY }}
