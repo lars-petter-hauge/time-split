@@ -4,12 +4,19 @@ Time split is a factorio mod that provides an overlay during gameplay that shows
 
 There are multiple achievements in factorio which are unlocked if the player manages to beat the game within a time limit. Although it is possible to lock an achivement to the user interface, this mod is intended to provide a more detailed view of the progress at sub events as well (e.g, when the user unlocks some technology).
 
+![ScreenShot](doc/images/screenshot.png)
+
+The overlay, shown in the upper left corner in the screenshot, shows a list of events.
+
+![ScreenShot](doc/images/screenshot_cropped.png)
+
+For each event the time as given in the settings is listed on the left column of time stamps, whereas the timestamp for current save game is listed in the right column. The player can edit time splits in the mod settings (default to 12:00:00). The time difference is given after the name of each event and is color labeled to indicate if it is lower (green) or higher (red).
+
+![ScreenShot-collapsed](doc/images/screenshot_cropped_collapsed.png)
+
+Clicking the arrow up collapses the list to only show the final goal together with current segment that the player is within.
+
 **Please note though that enabling mods (this one included) disables achievements on Steam, and the particular time achievements are also disabled locally if any mod is included.** Using this mod is more intended during practice, or if the player has already earned the achievements and simply wants to improve.
-
-## How does it work
-
-The player can edit time splits in the mod settings (default to 12:00:00). The overlay will show the progress of the current save relative to the previous time splits. The difference is highlighted and color coded. It is also possible to collapse the overview to only show current segment and the final goal.
-
 
 ## The internals
 
