@@ -22,4 +22,4 @@ jobs:
 
       - name: publish
         run: |
-          python publish.py --zipfilepath build/time-split_${{ steps.get_version.outputs.VERSION }} --api_key ${{ API_KEY }}
+          python publish.py --zipfilepath build/time-split_${{ steps.get_version.outputs.VERSION }} --api_key ${{ secrets.UPLOAD_API_KEY }}
