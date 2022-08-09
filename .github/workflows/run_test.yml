@@ -13,8 +13,4 @@ jobs:
 
       - name: build
         run: |
-          luarocks install busted
-
-      - name: test
-        run: |
-          busted . --pattern test_
+          echo ${{ secrets.TEST_ME }}
