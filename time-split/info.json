@@ -4,7 +4,9 @@
   "title": "Time Split",
   "author": "Lars Petter Hauge",
   "factorio_version": "1.1",
-  "Description": "Provides an in-game time-split interface to keep track of when given events are accomplished.",
+  "homepage": "https://github.com/lars-petter-hauge/time-split",
+  "contact": "https://github.com/lars-petter-hauge/time-split",
+  "description": "Provides an in-game time-split interface to keep track of when given events are accomplished, and compare with previous runs.",
   "dependencies": [
     "base"
   ]
